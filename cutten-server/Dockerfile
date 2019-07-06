@@ -1,8 +1,8 @@
 FROM node:10.16.0
-WORKDIR /src
-COPY package.json /src
-COPY yarn.lock /src
+WORKDIR /cutten-server
+COPY ./package.json /cutten-server
+COPY ./yarn.lock /cutten-server
 RUN yarn install
-COPY . /src
+COPY . /cutten-server
 CMD ["yarn", "dev"]
 EXPOSE 8000

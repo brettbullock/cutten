@@ -1,7 +1,36 @@
-import * as Koa from 'koa';
+import * as koa from 'koa';
+import * as koaRouter from 'koa-router';
+import * as koaBody from 'koa-bodyparser';
 
-const app = new Koa();
+import {
+  ApolloServer,
+  gql
+} from 'apollo-server-koa';
 
-app.listen(8000);
+const port = 8000;
 
-console.log('simple server is running');
+// Construct a schema, using GraphQL schema language
+const typeDefs = gql`
+  type Query {
+    hello: String
+  }
+`;
+ 
+// Provide resolver functions for your schema fields
+const resolvers = {
+  Query: {
+    hello: () => 'Hello world!',
+  },
+};
+
+// Init the apollo server
+const server = new ApolloServer({ typeDefs, resolvers });
+
+// Init the koa app
+const app = new koa();
+
+// attach koa app to the Apollo Server
+server.applyMiddleware({ app });
+
+// start the server
+app.listen({ port }, () => console.log(`Serverasddfsdfasdsdsdsddfsdfgsdf ready at http://localhost:${port}${server.graphqlPath}`));

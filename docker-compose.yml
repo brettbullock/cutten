@@ -1,0 +1,13 @@
+version: "3.7"
+services:
+
+  cutten-server:
+    container_name: cutten-server
+    build:
+      context: ./cutten-server
+    volumes:
+      - ./cutten-server/src:/cutten-server/src
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=development
