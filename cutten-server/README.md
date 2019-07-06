@@ -8,12 +8,12 @@ Graphql server that analyzes WhatsApp chats.
 
 Make sure you have docker and docker compose installed. For information on how to install it for your dev system.
 
-docker:
-  Linux: https://docs.docker.com/install/linux/docker-ce/ubuntu/
-  macOS: https://docs.docker.com/docker-for-mac/install/
+docker:  
+&nbsp;&nbsp;&nbsp;&nbsp;Linux: https://docs.docker.com/install/linux/docker-ce/ubuntu/  
+&nbsp;&nbsp;&nbsp;&nbsp;macOS: https://docs.docker.com/docker-for-mac/install/
 
-docker-compose:
-  https://docs.docker.com/compose/install/
+docker-compose:  
+&nbsp;&nbsp;&nbsp;&nbsp; All: https://docs.docker.com/compose/install/
 
 ### Server
 
