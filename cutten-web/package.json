@@ -1,0 +1,8 @@
+{
+  "name": "cutten-web",
+  "version": "1.0.0",
+  "description": "React app for showing content from cutten-server",
+  "main": "index.js",
+  "author": "Adam Aho & Brett Bullock",
+  "license": "MIT"
+}
