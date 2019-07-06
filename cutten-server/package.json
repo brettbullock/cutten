@@ -5,8 +5,17 @@
   "author": "Adam Aho & Brett Bullock",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "start": "ts-node src/index.ts"
+  },
   "dependencies": {
-    "cross-env": "5.0.5"
+    "koa": "^2.7.0",
+    "koa-body": "^4.1.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.2"
   },
   "devDependencies": {
     "@types/koa": "^2.0.49",
