@@ -1,7 +1,5 @@
-import * as koa from 'koa';
 import * as path from 'path';
-import * as koaRouter from 'koa-router';
-import * as koaBody from 'koa-bodyparser';
+import * as koa from 'koa';
 
 import {
   fileLoader,
@@ -10,8 +8,7 @@ import {
 } from 'merge-graphql-schemas';
 
 import {
-  ApolloServer,
-  gql
+  ApolloServer
 } from 'apollo-server-koa';
 
 const port = 8000;
