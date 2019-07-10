@@ -11,3 +11,12 @@ services:
       - "8000:8000"
     environment:
       - NODE_ENV=development
+
+  cutten-web:
+    container_name: cutten-web
+    build:
+      context: ./cutten-web
+    volumes:
+      - ./cutten-web/src:/cutten-web/src
+    ports:
+      - "9000:9000"
