@@ -1,6 +1,13 @@
 import * as koa from 'koa';
+import * as path from 'path';
 import * as koaRouter from 'koa-router';
 import * as koaBody from 'koa-bodyparser';
+
+import {
+  fileLoader,
+  mergeTypes,
+  mergeResolvers
+} from 'merge-graphql-schemas';
 
 import {
   ApolloServer,
@@ -9,19 +16,13 @@ import {
 
 const port = 8000;
 
-// Construct a schema, using GraphQL schema language
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
- 
-// Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!',
-  },
-};
+// fetch all of the files that have defined graphql schema
+const typesArray = fileLoader(path.join(__dirname, "./**/*.graphql"));
+const resolversArray = fileLoader(path.join(__dirname, "./**/*.resolvers.*"));
+
+// merge the types and resolvers into one file
+const typeDefs = mergeTypes(typesArray);
+const resolvers = mergeResolvers(resolversArray);
 
 // Init the apollo server
 const server = new ApolloServer({ typeDefs, resolvers });
