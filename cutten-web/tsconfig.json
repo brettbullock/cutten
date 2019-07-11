@@ -5,8 +5,15 @@
     "strict": true,
     "jsx": "react",
     "rootDir": "./src",
+    "baseUrl": "./src",
     "incremental": true,
+    "paths": {
+      "~*": ["./*"]
+    },
     "experimentalDecorators": true,
+    "skipLibCheck": true,
     "lib": ["dom", "es2015"]
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
