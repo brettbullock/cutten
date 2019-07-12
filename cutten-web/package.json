@@ -38,8 +38,11 @@
   },
   "dependencies": {
     "@types/styled-components": "^4.1.18",
+    "apollo-boost": "^0.4.3",
+    "graphql": "^14.4.2",
     "kingsbury": "^0.0.3",
     "react": "^16.8.6",
+    "react-apollo": "^2.5.8",
     "react-dom": "^16.8.6"
   }
 }
