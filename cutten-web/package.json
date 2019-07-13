@@ -10,6 +10,7 @@
     "start": "parcel ./src/index.html --port 9000",
     "build": "npm run type-check && parcel build ./src/index.html --public-url '/'",
     "prettify": "prettier --write './src/**/*.{ts,tsx}'",
+    "lint": "tslint 'src/**/*.ts?(x)' --quiet",
     "test": "jest",
     "test:watch": "jest --watch",
     "type-check": "tsc --noEmit",
@@ -38,8 +39,11 @@
   },
   "dependencies": {
     "@types/styled-components": "^4.1.18",
+    "apollo-boost": "^0.4.3",
+    "graphql": "^14.4.2",
     "kingsbury": "^0.0.3",
     "react": "^16.8.6",
+    "react-apollo": "^2.5.8",
     "react-dom": "^16.8.6"
   }
 }
