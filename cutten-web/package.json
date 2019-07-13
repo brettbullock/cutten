@@ -10,6 +10,7 @@
     "start": "parcel ./src/index.html --port 9000",
     "build": "npm run type-check && parcel build ./src/index.html --public-url '/'",
     "prettify": "prettier --write './src/**/*.{ts,tsx}'",
+    "lint": "tslint 'src/**/*.ts?(x)' --quiet",
     "test": "jest",
     "test:watch": "jest --watch",
     "type-check": "tsc --noEmit",

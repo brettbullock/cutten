@@ -5,7 +5,11 @@
   "rules": {
     "variable-name": false,
     "function-name": false,
-    "jsx-no-lambda": false
+    "jsx-no-lambda": false,
+    "quotemark": [true, "single", "jsx-double"]
   },
-  "rulesDirectory": []
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": ["node_modules"]
+  }
 }

@@ -1,19 +1,28 @@
-import * as React from "react";
-import { render } from "react-dom";
-import ApolloClient from "apollo-boost";
-import { ApolloProvider } from "react-apollo";
+import * as React from 'react';
 
-import "./index.css";
+import {
+  default as ApolloClient
+}  from 'apollo-boost';
 
-import { App } from "./App";
+import {
+  render
+} from 'react-dom';
+
+import {
+  ApolloProvider
+} from 'react-apollo';
+
+import {
+  App
+} from './App';
 
 const client = new ApolloClient({
-    uri: "http://localhost:8000/graphql"
+  uri: 'http://localhost:8000/graphql'
 });
 
 render (
-    <ApolloProvider client={client}>
-        <App />
-    </ApolloProvider>, 
-    document.getElementById("root")
+  <ApolloProvider client={client}>
+      <App />
+  </ApolloProvider>, 
+  document.getElementById('root')
 );
