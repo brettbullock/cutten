@@ -1,7 +1,7 @@
 export default {
-    Query: {
-        hello:() => {
-            return "Hello world!"
-        }
-    }  
+  Query: {
+    hello:() => {
+      return "Hello world!"
+    }
+  }  
 }
