@@ -14,6 +14,8 @@ import {
   Notice
 } from 'kingsbury/lib';
 
+import UploadButton from './components/UploadButton';
+
 export interface Data {
   hello: string;
 };
@@ -23,7 +25,6 @@ const TEST_QUERY = gql`
     hello
   }
 `;
-
 
 export const App = () => (
   <Query<Data, any> query={TEST_QUERY}>
@@ -49,11 +50,7 @@ export const App = () => (
 
       return (
         <ThemeProvider theme={theme}>
-          <Notice
-            type="info"
-            title="Hello from Kingbury"
-            description={hello}
-          />
+          <UploadButton />
         </ThemeProvider>
       );
     }}
