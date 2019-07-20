@@ -21,9 +21,7 @@ export default {
       const writeStream = createWriteStream('/cutten-server/cutten.txt');
 
       // read the file and write file to disk
-      readStream.on('data', (data) => {
-        writeStream.write(data.toString());
-      });
+      await readStream.pipe(writeStream);
 
       return true;
     }
