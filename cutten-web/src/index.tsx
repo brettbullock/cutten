@@ -1,8 +1,16 @@
 import * as React from 'react';
 
 import {
-  default as ApolloClient
-}  from 'apollo-boost';
+  ApolloClient
+}  from 'apollo-client';
+
+import {
+  createUploadLink
+} from 'apollo-upload-client';
+
+import {
+  InMemoryCache
+} from 'apollo-cache-inmemory';
 
 import {
   render
@@ -12,12 +20,16 @@ import {
   ApolloProvider
 } from 'react-apollo';
 
+
 import {
   App
 } from './App';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:8000/graphql'
+  cache: new InMemoryCache(),
+  link: createUploadLink({
+    uri: 'http://localhost:8000/graphql'
+  })
 });
 
 render (
