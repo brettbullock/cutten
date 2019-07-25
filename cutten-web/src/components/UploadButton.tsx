@@ -11,14 +11,24 @@ import {
 import {
   Button
 } from 'kingsbury/lib';
+import console = require('console');
 
 interface IUploadButtonState {
   file: File | null;
+  uploaded: boolean;
 }
 
 export const UPLOAD_FILE = gql`
-  mutation fuckyouu($file: Upload!) {
+  mutation upload($file: Upload!) {
     upload(file: $file)
+  }
+`;
+
+export const ANALYZE = gql`
+  mutation anaylze {
+    analyze {
+      name
+    }
   }
 `;
 
@@ -31,7 +41,8 @@ class UploadButton extends React.Component<any, IUploadButtonState> {
     this.fileRef = React.createRef();
 
     this.state = {
-      file: null
+      file: null,
+      uploaded: false
     };
 
   }
@@ -60,40 +71,75 @@ class UploadButton extends React.Component<any, IUploadButtonState> {
     fileInput.click();
   }
 
-  render() {
+  onUpload = (uploadMutation: any) => {
     const {
       file
     } = this.state;
 
+    uploadMutation({
+      variables: { file }
+    })
+    .then(() => this.setState({ uploaded: true }))
+    .catch(() => console.log('error'));
+  }
+
+  onAnalyze = (mutation: any) => {
+    mutation()
+    .then((name: any) => console.log(name))
+    .catch(() => console.log('error'));
+  }
+
+  render() {
+    const {
+      file,
+      uploaded
+    } = this.state;
+
     return (
-      <Mutation mutation={UPLOAD_FILE}>
-        {(upload: any) => (
-          <React.Fragment>
-            <input
-              style={{ display: 'none' }}
-              type="file"
-              ref={this.fileRef}
-              onChange={this.onChange}
-            />
-            <Button
-              type="primary"
-              onClick={file ?
-                () => upload({
-                  variables: { file }
-                }) :
-                this.onClick
+      <Mutation mutation={uploaded ? ANALYZE : UPLOAD_FILE}>
+        {(mutation: any) => {
+
+          let buttonText: string;
+          let clickHandler: any;
+
+          if (file == null) {
+            buttonText = 'Select File';
+            clickHandler = this.onClick;
+          } else if (file !== null && !uploaded) {
+            buttonText = 'Upload';
+            clickHandler = () => this.onUpload(mutation);
+          } else {
+            buttonText = 'Analyze';
+            clickHandler = () => this.onAnalyze(mutation);
+          }
+          
+          return (
+            <React.Fragment>
+              <input
+                style={{ display: 'none' }}
+                type="file"
+                ref={this.fileRef}
+                onChange={this.onChange}
+              />
+              <Button
+                type="primary"
+                onClick={clickHandler}
+              >
+                {buttonText}
+              </Button>
+              {file &&
+                <div>{file.name}</div>
               }
-            >
-              {file ? 'Analyze' : 'Select File'}
-            </Button>
-            {file && file &&
-              <div>{file.name}</div>
-            }
-          </React.Fragment>
-        )}
+            </React.Fragment>
+          );
+        }}
       </Mutation>
     );
   }
 }
 
 export default UploadButton;
+
+// select file file == null
+// upload file file !== null
+// anaylze file uploaded == true

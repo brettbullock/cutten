@@ -4,10 +4,15 @@ type File {
   encoding: String!
 }
 
+type Analyze {
+  name: String!
+}
+
 type Query {
   upload: [File]
 }
 
 type Mutation {
   upload(file: Upload!): Boolean!
+  analyze: Analyze
 }

@@ -24,6 +24,11 @@ export default {
       await readStream.pipe(writeStream);
 
       return true;
+    },
+    analyze: async () => {
+      return {
+        name: 'brett'
+      };
     }
   },
 }
