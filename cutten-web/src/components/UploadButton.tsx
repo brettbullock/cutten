@@ -22,7 +22,7 @@ export const UPLOAD_FILE = gql`
   }
 `;
 
-class UploadButtonV2 extends React.Component<any, IUploadButtonState> {
+class UploadButton extends React.Component<any, IUploadButtonState> {
   fileRef: any
 
   render() {
@@ -60,4 +60,4 @@ class UploadButtonV2 extends React.Component<any, IUploadButtonState> {
   }
 }
 
-export default UploadButtonV2;
+export default UploadButton;

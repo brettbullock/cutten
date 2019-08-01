@@ -1,21 +1,7 @@
 import * as React from 'react';
 
-import {
-  gql
-} from 'apollo-boost';
-
-import {
-  Query
-} from 'react-apollo';
-
-import {
-  ThemeProvider,
-  theme,
-  Notice
-} from 'kingsbury/lib';
-
-import SelectButton from './SelectButton'
-import UploadButtonV2 from './UploadButtonV2'
+import SelectFileButton from './SelectFileButton'
+import UploadButton from './UploadButton'
 import AnalyzeButton from './AnalyzeButton'
 
 class Main extends React.Component {
@@ -46,11 +32,11 @@ class Main extends React.Component {
 
     return (
       <div>
-        <SelectButton 
+        <SelectFileButton 
           onFileSelect={this.onFileSelect}
           file={file}
         />
-        <UploadButtonV2 
+        <UploadButton 
           file={file}
         />
         <AnalyzeButton 

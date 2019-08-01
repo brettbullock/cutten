@@ -8,7 +8,7 @@ interface IUploadButtonState {
   file: File | null;
 }
 
-class SelectButton extends React.Component<any, IUploadButtonState> {
+class SelectFileButton extends React.Component<any, IUploadButtonState> {
   fileRef: any;
 
   constructor(props: any) {
@@ -65,4 +65,4 @@ class SelectButton extends React.Component<any, IUploadButtonState> {
   }
 }
 
-export default SelectButton;
+export default SelectFileButton;

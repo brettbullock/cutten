@@ -5,13 +5,6 @@ import {
 } from 'kingsbury/lib';
 
 class AnalyzeButton extends React.Component {
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      isClicked: false,
-    }
-  }
 
   onClick = () => {
     this.setState({isClicked: true})
@@ -19,7 +12,6 @@ class AnalyzeButton extends React.Component {
 
   render () {
     let { file } = this.props;
-    let { isClicked } = this.state;
 
     return (
       <div>
@@ -30,8 +22,6 @@ class AnalyzeButton extends React.Component {
         >
           Analyze
         </Button>
-        {isClicked && 
-          <p>Brett's a dev</p>}
       </div>
     )
   }

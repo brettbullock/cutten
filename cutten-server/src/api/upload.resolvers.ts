@@ -23,7 +23,6 @@ export default {
       // read the file and write file to disk
       await readStream.pipe(writeStream);
 
-      console.log("how are ya nowwwwww")
       return true;
     }
   },
