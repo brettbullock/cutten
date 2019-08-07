@@ -14,7 +14,7 @@ import {
   Notice
 } from 'kingsbury/lib';
 
-import UploadButton from './components/UploadButton';
+import Main from './components/Main'
 
 export interface Data {
   hello: string;
@@ -50,7 +50,7 @@ export const App = () => (
 
       return (
         <ThemeProvider theme={theme}>
-          <UploadButton />
+          <Main />
         </ThemeProvider>
       );
     }}

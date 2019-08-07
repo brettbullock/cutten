@@ -23,75 +23,39 @@ export const UPLOAD_FILE = gql`
 `;
 
 class UploadButton extends React.Component<any, IUploadButtonState> {
-  fileRef: any;
-
-  constructor(props: any) {
-    super(props);
-
-    this.fileRef = React.createRef();
-
-    this.state = {
-      file: null
-    };
-
-  }
-
-  onChange = ({ target: { files } }: React.ChangeEvent<HTMLInputElement>) => {    
-    if (!files) {
-      return;
-    }
-
-    if (files.length === 1) {
-      this.setState({
-        file: files[0]
-      });
-    }
-  }
-
-  onClick = () => {
-    if (!this.fileRef) {
-      return;
-    }
-
-    const {
-      current: fileInput
-    } = this.fileRef;
-
-    fileInput.click();
-  }
+  fileRef: any
 
   render() {
     const {
       file
-    } = this.state;
+    } = this.props;
 
     return (
-      <Mutation mutation={UPLOAD_FILE}>
-        {(upload: any) => (
-          <React.Fragment>
-            <input
-              style={{ display: 'none' }}
-              type="file"
-              ref={this.fileRef}
-              onChange={this.onChange}
-            />
-            <Button
-              type="primary"
-              onClick={file ?
-                () => upload({
-                  variables: { file }
-                }) :
-                this.onClick
-              }
-            >
-              {file ? 'Analyze' : 'Select File'}
-            </Button>
-            {file && file &&
-              <div>{file.name}</div>
-            }
-          </React.Fragment>
-        )}
-      </Mutation>
+      <div>
+        <Mutation mutation={UPLOAD_FILE}>
+          {(upload: any) => (
+            <React.Fragment>
+              <input
+                style={{ display: 'none' }}
+                type="file"
+              />
+              <Button
+                type="primary"
+                onClick={file ?
+                    () =>
+                      upload({
+                      variables: { file }
+                    }) :
+                  this.onClick
+                }
+                disabled={!file}
+              >
+                Upload File
+              </Button>
+            </React.Fragment>
+          )}
+        </Mutation>
+      </div>
     );
   }
 }
