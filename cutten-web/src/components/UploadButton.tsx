@@ -17,7 +17,7 @@ interface IUploadButtonState {
 }
 
 export const UPLOAD_FILE = gql`
-  mutation fuckyouu($file: Upload!) {
+  mutation upload($file: Upload!) {
     upload(file: $file)
   }
 `;
@@ -41,13 +41,12 @@ class UploadButton extends React.Component<any, IUploadButtonState> {
               />
               <Button
                 type="primary"
-                onClick={file ?
-                    () =>
-                      upload({
-                      variables: { file }
-                    }) :
-                  this.onClick
-                }
+                onClick={file && (
+                  () =>
+                    upload({
+                    variables: { file }
+                  })
+                )}
                 disabled={!file}
               >
                 Upload File

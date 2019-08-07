@@ -4,14 +4,18 @@ import {
   Button
 } from 'kingsbury/lib';
 
-class AnalyzeButton extends React.Component {
+interface IAnalyzeButton {
+  file: File | null;
+}
+
+class AnalyzeButton extends React.Component<IAnalyzeButton> {
 
   onClick = () => {
     this.setState({isClicked: true})
   }
 
   render () {
-    let { file } = this.props;
+    const { file } = this.props;
 
     return (
       <div>

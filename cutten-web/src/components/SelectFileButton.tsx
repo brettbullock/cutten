@@ -17,7 +17,7 @@ class SelectFileButton extends React.Component<any, IUploadButtonState> {
     this.fileRef = React.createRef();
   }
 
-  onChange = (e) => {
+  onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     this.props.onFileSelect(e)
   }
 

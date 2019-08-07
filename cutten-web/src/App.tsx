@@ -10,50 +10,14 @@ import {
 
 import {
   ThemeProvider,
-  theme,
-  Notice
+  theme
 } from 'kingsbury/lib';
 
 import Main from './components/Main'
 
-export interface Data {
-  hello: string;
-};
-
-const TEST_QUERY = gql`
-  query {
-    hello
-  }
-`;
-
 export const App = () => (
-  <Query<Data, any> query={TEST_QUERY}>
-    {({ loading, error, data }) => {
-
-      if (loading) {
-        return <p>Loading...</p>
-      };
-
-      if (error) {
-        return <p>Error</p>;
-      };
-
-      // need to handle this case just because ts will complain because data
-      // could be undefined
-      if (!data) {
-        return <p>No data</p>;
-      }
-
-      const {
-        hello
-      } = data;
-
-      return (
-        <ThemeProvider theme={theme}>
-          <Main />
-        </ThemeProvider>
-      );
-    }}
-  </Query>
+  <ThemeProvider theme={theme}>
+    <Main />
+  </ThemeProvider>
 );
 

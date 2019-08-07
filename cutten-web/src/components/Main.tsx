@@ -4,15 +4,15 @@ import SelectFileButton from './SelectFileButton'
 import UploadButton from './UploadButton'
 import AnalyzeButton from './AnalyzeButton'
 
-class Main extends React.Component {
-  constructor(props) {
-    super(props)
+interface IMainProps {
+  file: File | null;
+};
 
-    this.state = {
-      file: null,
-      isUploaded: null
-    };
-  }
+class Main extends React.Component<any, IMainProps> {
+  state = {
+    file: null,
+    isUploaded: null
+  };
 
   onFileSelect = ({ target: { files } }: React.ChangeEvent<HTMLInputElement>) => {    
 
@@ -28,7 +28,9 @@ class Main extends React.Component {
   }
 
   render() {
-    let { file } = this.state;
+    const {
+      file
+    } = this.state;
 
     return (
       <div>
