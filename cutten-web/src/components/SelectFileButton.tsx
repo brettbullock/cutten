@@ -40,26 +40,28 @@ class SelectFileButton extends React.Component<any, IUploadButtonState> {
 
     return (
       <div>
-        <React.Fragment>
-          <input
-            style={{ display: 'none' }}
-            type="file"
-            ref={this.fileRef}
-            onChange={this.onChange}
-          />
-          <Button
-            type="primary"
-            onClick={
-              this.onClick
-            }
-            disabled={file}
-          >
-            Select File
-          </Button>
-          {file &&
-            <div>{file.name}</div>
-          }
-        </React.Fragment>
+        <div className="button">
+          <React.Fragment>
+            <input
+              style={{ display: 'none' }}
+              type="file"
+              ref={this.fileRef}
+              onChange={this.onChange}
+            />
+            <Button
+              type="primary"
+              onClick={
+                this.onClick
+              }
+              disabled={file}
+            >
+              Select File
+            </Button>
+          </React.Fragment>
+        </div>
+        {file &&
+          <div>Name of file selected: {file.name}</div>
+        }
       </div>
     )
   }

@@ -31,7 +31,7 @@ class UploadButton extends React.Component<any, IUploadButtonState> {
     } = this.props;
 
     return (
-      <div>
+      <div className="button">
         <Mutation mutation={UPLOAD_FILE}>
           {(upload: any) => (
             <React.Fragment>
@@ -47,7 +47,6 @@ class UploadButton extends React.Component<any, IUploadButtonState> {
                     variables: { file }
                   })
                 )}
-                disabled={!file}
               >
                 Upload File
               </Button>
