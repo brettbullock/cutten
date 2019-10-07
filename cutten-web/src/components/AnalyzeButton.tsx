@@ -7,38 +7,19 @@ import {
 } from 'react-apollo';
 
 import {
-  gql
-} from 'apollo-boost';
-
-import {
   Button
 } from 'kingsbury/lib';
 
-import console = require('console');
-
-export const ANALYZE_FILE = gql`
-  query analyze {
-    analyze
-  }
-`;
-
 interface IAnalyzeButton {
   file: File | null;
+  onAnalyzeClick: (client: any) => void;
 }
 
 class AnalyzeButton extends React.Component<IAnalyzeButton> {
-  constructor(props) {
+  constructor(props: IAnalyzeButton) {
     super(props)
 
     this.state = { data: null }
-  }
-
-  onAnalyzeClick = (client) => {
-    const data = client.query({
-      query: ANALYZE_FILE
-    }).then(({ data }) => {
-      this.setState({data: data.analyze})
-    })
   }
 
   render () {
@@ -50,13 +31,13 @@ class AnalyzeButton extends React.Component<IAnalyzeButton> {
           <div className="button">
             <Button
               type="primary"
-              onClick={() => this.onAnalyzeClick(client)}
+              onClick={() => this.props.onAnalyzeClick(client)}
               // disabled={!file}
             >
               Analyze File
             </Button>
 
-            {this.state.data && 
+            {this.state.data === 0 && 
               <div>Number of messages sent yesterday: {this.state.data}</div>
             }
           </div>

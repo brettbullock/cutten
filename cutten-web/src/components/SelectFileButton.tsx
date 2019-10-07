@@ -53,15 +53,11 @@ class SelectFileButton extends React.Component<any, IUploadButtonState> {
               onClick={
                 this.onClick
               }
-              disabled={file}
             >
               Select File
             </Button>
           </React.Fragment>
         </div>
-        {file &&
-          <div>Name of file selected: {file.name}</div>
-        }
       </div>
     )
   }
