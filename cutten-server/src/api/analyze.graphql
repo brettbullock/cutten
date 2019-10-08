@@ -1,13 +1,12 @@
-type Count {
-  Aho: Int!
-  Brad: Int!
-  Brett: Int!
+type userPerDay {
+  name: String!
+  messageCount: Int!
+  # kBombCount: Int!
 }
 
 type Analyze {
-  perDay: Int!
-  # right now perUser comes back as an object - change this to array
-  perUser: Count!
+  totalPerDay: Int!
+  usersPerDay: [userPerDay!]!
 }
 
 type Query {

@@ -1,10 +1,28 @@
 import * as moment from 'moment'
-
+import * as readline from 'readline'
 import {
   createReadStream 
 } from 'fs'
 
-import * as readline from 'readline'
+
+// object constructor function for getMessagesPerUser
+function UserPerDay(name) {
+  this.name = name
+  this.messageCount = 0
+}
+
+// obhect constructor to initialize time values
+function TargetTime() {
+  this.yesterday = moment().subtract(1, 'days').dayOfYear()
+  this.thisYear = moment().subtract(1, 'days').get('year')
+}
+
+// object constructor to organize line data
+function MessageDetails(line) {
+  this.infoArray = line.split(": ")[0].split(/[,|^ -]+ /)
+  this.messageDay = moment(this.infoArray[0]).dayOfYear()
+  this.messageYear = moment(this.infoArray[0]).get('year')
+}
 
 // this is going ot be the start of the analyzer
 class BaseAnalyzer {
@@ -13,27 +31,18 @@ class BaseAnalyzer {
     return new Promise((resolve, reject) => {
       const rl = readline.createInterface({input: createReadStream('/cutten-server/cutten.txt') })
 
-      // initialize counts for both total messages and individual messages
+      // initialize return integer
       let messageCount = 0
-
-      // initialize date and years for comparison
-      const yesterday = moment().subtract(1, 'days').dayOfYear()
-      const thisYear = moment().subtract(1, 'days').get('year')
+      // set time
+      const time = new TargetTime()
 
       // for each line..
       rl.on('line', (line) => {
-        // take first half of line containing date, time, and name
-        const messageInfo = line.split(": ")[0]
-        // split message info at date
-        const nameStr = messageInfo.split(", ")
-        // capture date from message info
-        const dateStr = messageInfo.split(", ")[0]
-        // convert date string to day of year, and get year
-        const messageDay = moment(dateStr).dayOfYear()
-        const messageYear = moment(dateStr).get('year')
+        // clean up messages
+        const messageDetails = new MessageDetails(line)
 
         // match date to today and check year, increment
-        if (messageYear === thisYear && messageDay === yesterday) {
+        if (messageDetails.messageYear === time.thisYear && messageDetails.messageDay === time.yesterday) {
           messageCount++
         }
       })
@@ -44,44 +53,42 @@ class BaseAnalyzer {
       })
     })
   }
-  // gets total number of messages per user for the day
+  // gets total number of messages per user for the day - the information needs to come back as an array of objects
   public static getMessagesPerUser() {
     return new Promise((resolve, reject) => {
       const rl = readline.createInterface({input: createReadStream('/cutten-server/cutten.txt') })
 
-      // initialize counts for both total messages and individual messages
-      const countObject = {
-        first: 0,
-        second: 0,
-        third: 0
-      }
-
-      // initialize date and years for comparison
-      const yesterday = moment().subtract(1, 'days').dayOfYear()
-      const thisYear = moment().subtract(1, 'days').get('year')
+      // initialize return array
+      const usersPerDay = []
+      // create objects that will represent each of us - for now these will be hardcoded
+      const ahoObject = new UserPerDay("Aho")
+      const bradObject = new UserPerDay("Poo")
+      const brettObject = new UserPerDay("Brett")
+      // set time
+      const time = new TargetTime()
       
       // for each line..
       rl.on('line', (line) => {
-        // take first half of line containing date, time, and name
-        const messageInfo = line.split(": ")[0]
-
-        // split info into three parts - date time name. Regex looks for ", ", and " - "
-        const infoArray = messageInfo.split(/[,|^ -]+ /)
-
+        // clean up messages 
+        const messageDetails = new MessageDetails(line)
+        
         // for now we will use hard coded names
         // count times each name shows up
-        if (infoArray[2] === "Adam Aho") {
-          countObject.first += 1
-        } else if (infoArray[2] === "Brad Dudeck") {
-          countObject.second += 1
-        } else if (infoArray[2] === "Brett Bullock") {
-          countObject.third += 1
+        if (messageDetails.infoArray[2] === "Adam Aho") {
+          ahoObject.messageCount += 1
+        } else if (messageDetails.infoArray[2] === "Brad Dudeck") {
+          bradObject.messageCount += 1
+        } else if (messageDetails.infoArray[2] === "Brett Bullock") {
+          brettObject.messageCount += 1
         }
       })
 
       // after lines have been looped through
       rl.on('close', () => {
-        resolve(countObject)
+        // add objects to return array 
+        usersPerDay.push(ahoObject, bradObject, brettObject)
+        // return array
+        resolve(usersPerDay)
       })
     })
   }
