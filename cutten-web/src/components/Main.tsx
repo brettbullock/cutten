@@ -7,7 +7,7 @@ import {
 import SelectFileButton from './SelectFileButton'
 import UploadButton from './UploadButton'
 import AnalyzeButton from './AnalyzeButton'
-import { userInfo } from 'os';
+import DateInput from './DateInput'
 
 export const ANALYZE_FILE = gql`
   query analyze {
@@ -21,9 +21,9 @@ export const ANALYZE_FILE = gql`
   }
 `;
 
-// type for Main props
+// type for Main props - although there are no props in Main
+// this type declaration is relevant to ward off ts errors
 interface IMainProps {
-  file: File | null;
 };
 
 // type for nested totalPerDay state
@@ -43,20 +43,16 @@ interface IStateMessageCount {
 
 // type for userPerDay object 
 interface IStateUserPerDay {
-  userPerDay: {
-    [key: string]: IStateUserName | IStateMessageCount
-  }
-}
-// type for usersPerDay array
-interface IStateUsersPerDayArray {
-  [index: number]: IStateUserPerDay 
+  name: IStateUserName
+  messageCount: IStateMessageCount
 }
 
 // type for data response state -> data here is the response of the API call
 interface IStateData {
   data: { 
-    [key: string]: {
-      [key: string]: IStateUsersPerDayArray | IStateTotalPerDay
+    analyze: {
+      totalPerDay: IStateTotalPerDay
+      usersPerDay: [IStateUserPerDay]
     }
   }
 }
@@ -66,8 +62,10 @@ interface IMainState {
   file: File | null;
   isUploaded: boolean | null;
   data: { 
-    [key: string]: {
-      [key: string]: IStateUsersPerDayArray | IStateTotalPerDay
+    analyze: {
+      // [key: string]: IStateUsersPerDayArray | IStateTotalPerDay
+      totalPerDay: IStateTotalPerDay
+      usersPerDay: [IStateUserPerDay] 
     }
   } | null;
 }
@@ -114,6 +112,7 @@ class Main extends React.Component<IMainProps, IMainState> {
         <UploadButton 
           file={file}
         />
+        <DateInput/>
         <AnalyzeButton
           onAnalyzeClick={this.onAnalyzeClick} 
           file={file}
@@ -123,17 +122,16 @@ class Main extends React.Component<IMainProps, IMainState> {
           {file &&
           <h2>{file.name} ready for upload.</h2>}
         </div>
-        {/* going to clean this up */}
+
         <div>
           {data &&
             <div>
               <h2>{data.analyze.totalPerDay} messages sent yesterday</h2>
-              <h3>{data.analyze.usersPerDay[0].name} sent {data.analyze.usersPerDay[0].messageCount} in total</h3>
-              <h3>{data.analyze.usersPerDay[1].name} sent {data.analyze.usersPerDay[1].messageCount} in total</h3>
-              <h3>{data.analyze.usersPerDay[2].name} sent {data.analyze.usersPerDay[2].messageCount} in total</h3>
+              {data.analyze.usersPerDay.map((user: IStateUserPerDay, index: number) => (
+                <h3 key={index}>{user.name} sent {user.messageCount} in total</h3>  
+              ))}
             </div>
           }
-
         </div>
       </div>
     )

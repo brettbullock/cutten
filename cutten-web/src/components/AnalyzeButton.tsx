@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import '../App.css'
-
 import { 
   ApolloConsumer
 } from 'react-apollo';
@@ -10,16 +8,15 @@ import {
   Button
 } from 'kingsbury/lib';
 
-interface IAnalyzeButton {
+import '../App.css'
+interface IAnalyzeButtonProps {
   file: File | null;
   onAnalyzeClick: (client: any) => void;
 }
 
-class AnalyzeButton extends React.Component<IAnalyzeButton> {
-  constructor(props: IAnalyzeButton) {
+class AnalyzeButton extends React.Component<IAnalyzeButtonProps> {
+  constructor(props: IAnalyzeButtonProps) {
     super(props)
-
-    this.state = { data: null }
   }
 
   render () {
@@ -36,35 +33,11 @@ class AnalyzeButton extends React.Component<IAnalyzeButton> {
             >
               Analyze File
             </Button>
-
-            {this.state.data === 0 && 
-              <div>Number of messages sent yesterday: {this.state.data}</div>
-            }
           </div>
         )}
       </ApolloConsumer>
-              
     )
   }
 }
 
 export default AnalyzeButton
-
-{/* <ApolloConsumer>
-        {client => (
-          <div>
-            {this.state.dog && <img src={this.state.dog.displayImage} />}
-            <button
-              onClick={async () => {
-                const { data } = await client.query({
-                  query: GET_DOG_PHOTO,
-                  variables: { breed: 'bulldog' },
-                });
-                this.onDogFetched(data.dog);
-              }}
-            >
-              Click me!
-            </button>
-          </div>
-        )}
-      </ApolloConsumer> */}
