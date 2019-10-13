@@ -21,7 +21,7 @@ class DateInput extends React.Component<IDateInputProps> {
       <div>
         <Input
           placeholder="Select a date"
-          // borderType="bottom"
+          borderType="none"
           // htmlType="date"
         />
       </div>

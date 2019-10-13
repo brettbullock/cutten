@@ -9,6 +9,7 @@ import {
 function UserPerDay(name) {
   this.name = name
   this.messageCount = 0
+  this.kcount = 0
 }
 
 // obhect constructor to initialize time values
@@ -20,6 +21,9 @@ function TargetTime() {
 // object constructor to organize line data
 function MessageDetails(line) {
   this.infoArray = line.split(": ")[0].split(/[,|^ -]+ /)
+  // for kbombs
+  this.message = line.split(": ")[1].match(/^(k|K|Potassium|\ud83c[\ud000-\udfff])$/)
+  // this.k = line.split(": ")[1].filter((msg: any) => msg.match(/^(k|K|Potassium|\ud83c[\ud000-\udfff])$/))
   this.messageDay = moment(this.infoArray[0]).dayOfYear()
   this.messageYear = moment(this.infoArray[0]).get('year')
 }
@@ -72,10 +76,15 @@ class BaseAnalyzer {
         // clean up messages 
         const messageDetails = new MessageDetails(line)
         
+        // testing out kbomb functionality
+        console.log(messageDetails.message)
+
         // for now we will use hard coded names
         // count times each name shows up
         if (messageDetails.infoArray[2] === "Adam Aho") {
           ahoObject.messageCount += 1
+          // pseudo code for kbombs
+          // if messageDetails.k, increase ahoobj.k
         } else if (messageDetails.infoArray[2] === "Brad Dudeck") {
           bradObject.messageCount += 1
         } else if (messageDetails.infoArray[2] === "Brett Bullock") {
