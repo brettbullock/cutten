@@ -49,7 +49,7 @@ class SelectFileButton extends React.Component<any, IUploadButtonState> {
               onChange={this.onChange}
             />
             <Button
-              type="primary"
+              buttonType="primary"
               onClick={
                 this.onClick
               }

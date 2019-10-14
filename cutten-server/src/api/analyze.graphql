@@ -1,7 +1,7 @@
 type userPerDay {
   name: String!
   messageCount: Int!
-  # kBombCount: Int!
+  kCount: Int!
 }
 
 type Analyze {
@@ -10,5 +10,5 @@ type Analyze {
 }
 
 type Query {
-  analyze: Analyze!
+  analyze(date: string): Analyze!
 }

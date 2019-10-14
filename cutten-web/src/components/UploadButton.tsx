@@ -40,7 +40,7 @@ class UploadButton extends React.Component<any, IUploadButtonState> {
                 type="file"
               />
               <Button
-                type="primary"
+                buttonType="primary"
                 onClick={file && (
                   () =>
                     upload({

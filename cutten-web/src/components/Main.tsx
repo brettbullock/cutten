@@ -16,6 +16,7 @@ export const ANALYZE_FILE = gql`
       usersPerDay {
         name
         messageCount
+        kCount
       }
     }
   }
@@ -105,6 +106,7 @@ class Main extends React.Component<IMainProps, IMainState> {
 
     return (
       <div>
+        <DateInput/>
         <SelectFileButton 
           onFileSelect={this.onFileSelect}
           file={file}
@@ -112,7 +114,6 @@ class Main extends React.Component<IMainProps, IMainState> {
         <UploadButton 
           file={file}
         />
-        <DateInput/>
         <AnalyzeButton
           onAnalyzeClick={this.onAnalyzeClick} 
           file={file}

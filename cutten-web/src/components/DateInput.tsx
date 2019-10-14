@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import {
-  Input
+  Input, Text
 } from 'kingsbury/lib';
 
 import '../App.css'
@@ -19,11 +19,13 @@ class DateInput extends React.Component<IDateInputProps> {
 
     return (
       <div>
+        <Text
+          textType="h2"
+        >Filter for date: </Text>
         <Input
-          placeholder="Select a date"
-          borderType="none"
-          // htmlType="date"
+          htmlType="date"
         />
+        {/* if value, output value (for testing purposes) */}
       </div>
     )
   }

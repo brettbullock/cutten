@@ -9,21 +9,27 @@ import {
 function UserPerDay(name) {
   this.name = name
   this.messageCount = 0
-  this.kcount = 0
+  this.kCount = 0
 }
 
 // obhect constructor to initialize time values
 function TargetTime() {
+  // for specific day
+  // this.day = moment(date).dayOfYear()
   this.yesterday = moment().subtract(1, 'days').dayOfYear()
+  // for specific year
+  // this.year = moment(date).get('year')
   this.thisYear = moment().subtract(1, 'days').get('year')
 }
 
 // object constructor to organize line data
 function MessageDetails(line) {
-  this.infoArray = line.split(": ")[0].split(/[,|^ -]+ /)
-  // for kbombs
-  this.message = line.split(": ")[1].match(/^(k|K|Potassium|\ud83c[\ud000-\udfff])$/)
-  // this.k = line.split(": ")[1].filter((msg: any) => msg.match(/^(k|K|Potassium|\ud83c[\ud000-\udfff])$/))
+  this.messageArray = line.split(": ")
+  this.infoArray = this.messageArray[0].split(/[,|^ -]+ /)
+  // fof k's - if statement filters out unwanted undefined's
+  if (this.messageArray[1]) {
+    this.k = this.messageArray[1].match(/^(k|K|Potassium|\ud83c[\udf4c])$/)
+  }
   this.messageDay = moment(this.infoArray[0]).dayOfYear()
   this.messageYear = moment(this.infoArray[0]).get('year')
 }
@@ -75,20 +81,25 @@ class BaseAnalyzer {
       rl.on('line', (line) => {
         // clean up messages 
         const messageDetails = new MessageDetails(line)
-        
-        // testing out kbomb functionality
-        console.log(messageDetails.message)
 
         // for now we will use hard coded names
         // count times each name shows up
         if (messageDetails.infoArray[2] === "Adam Aho") {
           ahoObject.messageCount += 1
-          // pseudo code for kbombs
-          // if messageDetails.k, increase ahoobj.k
+          // if k exists, add to k count
+          if (messageDetails.k) {
+            ahoObject.kCount += 1
+          }
         } else if (messageDetails.infoArray[2] === "Brad Dudeck") {
           bradObject.messageCount += 1
+          if (messageDetails.k) {
+            bradObject.kCount += 1
+          }
         } else if (messageDetails.infoArray[2] === "Brett Bullock") {
           brettObject.messageCount += 1
+          if (messageDetails.k) {
+            brettObject.kCount += 1
+          }
         }
       })
 
