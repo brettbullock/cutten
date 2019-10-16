@@ -29,7 +29,6 @@ class AnalyzeButton extends React.Component<IAnalyzeButtonProps> {
             <Button
               buttonType="primary"
               onClick={() => this.props.onAnalyzeClick(client)}
-              // disabled={!file}
             >
               Analyze File
             </Button>

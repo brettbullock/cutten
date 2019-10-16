@@ -1,13 +1,13 @@
 import * as React from 'react';
 
 import {
-  Input, Text
+  Input
 } from 'kingsbury/lib';
 
 import '../App.css'
 
 interface IDateInputProps {
-
+  onDateInput: (event: any) => void
 }
 
 class DateInput extends React.Component<IDateInputProps> {
@@ -19,13 +19,11 @@ class DateInput extends React.Component<IDateInputProps> {
 
     return (
       <div>
-        <Text
-          textType="h2"
-        >Filter for date: </Text>
         <Input
+          label="Filter for date:"
           htmlType="date"
+          onChange={this.props.onDateInput}
         />
-        {/* if value, output value (for testing purposes) */}
       </div>
     )
   }

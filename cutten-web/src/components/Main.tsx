@@ -10,10 +10,10 @@ import AnalyzeButton from './AnalyzeButton'
 import DateInput from './DateInput'
 
 export const ANALYZE_FILE = gql`
-  query analyze {
+  query analyze($date: String) {
     analyze {
-      totalPerDay
-      usersPerDay {
+      totalPerDay(date: $date)
+      usersPerDay(date: $date) {
         name
         messageCount
         kCount
@@ -61,6 +61,7 @@ interface IStateData {
 // type for Main state
 interface IMainState {
   file: File | null;
+  date: String | null;
   isUploaded: boolean | null;
   data: { 
     analyze: {
@@ -74,6 +75,8 @@ interface IMainState {
 class Main extends React.Component<IMainProps, IMainState> {
   state: IMainState = {
     file: null,
+    // if no date selected, default to yesterday.
+    date: null,
     isUploaded: null,
     data: null
   };
@@ -92,21 +95,29 @@ class Main extends React.Component<IMainProps, IMainState> {
 
   onAnalyzeClick = (client: any) => {
     const data = client.query({
-      query: ANALYZE_FILE
+      query: ANALYZE_FILE,
+      variables: { date: this.state.date }
     }).then(({ data }: IStateData) => {
       this.setState({data})
     })
   }
 
+  onDateInput = (event: any) => {
+    this.setState({date: event.target.value})
+  }
+
   render() {
     const {
       file,
+      date,
       data
     } = this.state;
 
     return (
       <div>
-        <DateInput/>
+        <DateInput
+          onDateInput={this.onDateInput}
+        />
         <SelectFileButton 
           onFileSelect={this.onFileSelect}
           file={file}
@@ -123,11 +134,10 @@ class Main extends React.Component<IMainProps, IMainState> {
           {file &&
           <h2>{file.name} ready for upload.</h2>}
         </div>
-
         <div>
           {data &&
             <div>
-              <h2>{data.analyze.totalPerDay} messages sent yesterday</h2>
+              <h2>{data.analyze.totalPerDay} messages sent on {date}</h2>
               {data.analyze.usersPerDay.map((user: IStateUserPerDay, index: number) => (
                 <h3 key={index}>{user.name} sent {user.messageCount} in total</h3>  
               ))}
