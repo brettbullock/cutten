@@ -4,10 +4,13 @@ import {
   gql
 } from 'apollo-boost';
 
+import Header from './Header'
 import SelectFileButton from './SelectFileButton'
 import UploadButton from './UploadButton'
 import AnalyzeButton from './AnalyzeButton'
+import ResetButton from './ResetButton'
 import DateInput from './DateInput'
+import Statistics from './Statistics'
 
 export const ANALYZE_FILE = gql`
   query analyze($date: String) {
@@ -42,10 +45,16 @@ interface IStateMessageCount {
   messageCount: number | null;
 }
 
+// type for kCount
+interface IStateKCount {
+  kCount: number | null;
+}
+
 // type for userPerDay object 
 interface IStateUserPerDay {
   name: IStateUserName
   messageCount: IStateMessageCount
+  kCount: IStateKCount
 }
 
 // type for data response state -> data here is the response of the API call
@@ -63,21 +72,28 @@ interface IMainState {
   file: File | null;
   date: String | null;
   isUploaded: boolean | null;
+  disableAnalyze: boolean;
   data: { 
     analyze: {
-      // [key: string]: IStateUsersPerDayArray | IStateTotalPerDay
       totalPerDay: IStateTotalPerDay
       usersPerDay: [IStateUserPerDay] 
     }
   } | null;
 }
 
+// sets default date to yesterday - using js Date b/c moment wasn't working
+const defaultDate = () => {
+  const date = new Date();
+  date.setDate(date.getDate() - 1);
+  return date.toISOString().split('T')[0];
+}
+
 class Main extends React.Component<IMainProps, IMainState> {
   state: IMainState = {
     file: null,
-    // if no date selected, default to yesterday.
-    date: null,
+    date: defaultDate(),
     isUploaded: null,
+    disableAnalyze: false,
     data: null
   };
 
@@ -98,7 +114,13 @@ class Main extends React.Component<IMainProps, IMainState> {
       query: ANALYZE_FILE,
       variables: { date: this.state.date }
     }).then(({ data }: IStateData) => {
-      this.setState({data})
+      this.setState({data, disableAnalyze: true})
+    })
+  }
+
+  onResetClick = () => {
+    this.setState({
+      disableAnalyze: false
     })
   }
 
@@ -110,11 +132,13 @@ class Main extends React.Component<IMainProps, IMainState> {
     const {
       file,
       date,
+      disableAnalyze,
       data
     } = this.state;
 
     return (
       <div>
+        <Header/>
         <DateInput
           onDateInput={this.onDateInput}
         />
@@ -127,23 +151,18 @@ class Main extends React.Component<IMainProps, IMainState> {
         />
         <AnalyzeButton
           onAnalyzeClick={this.onAnalyzeClick} 
-          file={file}
+          disabled={disableAnalyze}
         />
-
-        <div>
-          {file &&
-          <h2>{file.name} ready for upload.</h2>}
-        </div>
-        <div>
-          {data &&
-            <div>
-              <h2>{data.analyze.totalPerDay} messages sent on {date}</h2>
-              {data.analyze.usersPerDay.map((user: IStateUserPerDay, index: number) => (
-                <h3 key={index}>{user.name} sent {user.messageCount} in total</h3>  
-              ))}
-            </div>
-          }
-        </div>
+        <ResetButton
+          disabled={!disableAnalyze}
+          onResetClick={this.onResetClick}
+        />
+        <Statistics
+          showStats={disableAnalyze}
+          file={file}
+          data={data}
+          date={date}
+        />
       </div>
     )
   }

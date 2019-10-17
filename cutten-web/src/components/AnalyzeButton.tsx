@@ -10,7 +10,7 @@ import {
 
 import '../App.css'
 interface IAnalyzeButtonProps {
-  file: File | null;
+  disabled: boolean;
   onAnalyzeClick: (client: any) => void;
 }
 
@@ -20,7 +20,7 @@ class AnalyzeButton extends React.Component<IAnalyzeButtonProps> {
   }
 
   render () {
-    const { file } = this.props;
+    const { disabled } = this.props;
 
     return (
       <ApolloConsumer>
@@ -28,6 +28,7 @@ class AnalyzeButton extends React.Component<IAnalyzeButtonProps> {
           <div className="button">
             <Button
               buttonType="primary"
+              disabled={disabled}
               onClick={() => this.props.onAnalyzeClick(client)}
             >
               Analyze File

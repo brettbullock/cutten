@@ -4,14 +4,19 @@ import {
   Button
 } from 'kingsbury/lib';
 
-interface IUploadButtonState {
+interface ISelectFileState {
   file: File | null;
 }
 
-class SelectFileButton extends React.Component<any, IUploadButtonState> {
+interface ISelectFileProps {
+  file: File | null;
+  onFileSelect: (event: any) => void;
+}
+
+class SelectFileButton extends React.Component<ISelectFileProps, ISelectFileState> {
   fileRef: any;
 
-  constructor(props: any) {
+  constructor(props: ISelectFileProps) {
     super(props);
 
     this.fileRef = React.createRef();

@@ -20,7 +20,7 @@ class DateInput extends React.Component<IDateInputProps> {
     return (
       <div>
         <Input
-          label="Filter for date:"
+          label="Filter for date (optional, default is yesterday):"
           htmlType="date"
           onChange={this.props.onDateInput}
         />

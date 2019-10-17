@@ -12,8 +12,8 @@ import {
   Button
 } from 'kingsbury/lib';
 
-interface IUploadButtonState {
-  file: File | null;
+interface IUploadButtonProps {
+  file: any;
 }
 
 export const UPLOAD_FILE = gql`
@@ -22,7 +22,7 @@ export const UPLOAD_FILE = gql`
   }
 `;
 
-class UploadButton extends React.Component<any, IUploadButtonState> {
+class UploadButton extends React.Component<IUploadButtonProps> {
   fileRef: any
 
   render() {
