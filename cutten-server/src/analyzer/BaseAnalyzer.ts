@@ -85,26 +85,23 @@ class BaseAnalyzer {
         // clean up messages 
         const messageDetails = new MessageDetails(line)
 
-        // for now we will use hard coded names
+        //   for now we will use hard coded names
         // count times each name shows up
-        if (messageDetails.messageYear === targetTime.year && messageDetails.messageDay === targetTime.day) {
-          if (messageDetails.infoArray[2] === "Adam Aho") {
-            ahoObject.messageCount += 1
-            // if k exists, add to k count
-            if (messageDetails.k) {
-              ahoObject.kCount += 1
-            }
-          } else if (messageDetails.infoArray[2] === "Brad Dudeck") {
-            bradObject.messageCount += 1
-            if (messageDetails.k) {
-              bradObject.kCount += 1
-            }
-          } else if (messageDetails.infoArray[2] === "Brett Bullock") {
-            brettObject.messageCount += 1
-            if (messageDetails.k) {
-              brettObject.kCount += 1
-            }
-          }
+        if (!(messageDetails.messageYear === targetTime.year && messageDetails.messageDay === targetTime.day)) {return}
+        
+        switch (messageDetails.infoArray[2]) {
+          case "Adam Aho":
+            ahoObject.messageCount +=1
+            if (messageDetails.k) { ahoObject.k += 1 }
+            break;
+          case "Brad Dudeck":
+            bradObject.messageCount +=1
+            if (messageDetails.k) { bradObject.k += 1 }
+            break;
+          case "Brett Bullock":
+            brettObject.messageCount +=1
+            if (messageDetails.k) { brettObject.k += 1 }
+            break;
         }
       })
 

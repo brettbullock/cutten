@@ -1,6 +1,15 @@
 version: "3.7"
 services:
 
+  # cutten-database:
+  #   container_name: cutten-db
+  #   build:
+  #     context: ./cutten-db
+  #   volumes:
+  #     - ./cutten-db/src:/cutten-db/src
+  #   ports:
+  #     - "7000:7000"
+
   cutten-server:
     container_name: cutten-server
     build:
