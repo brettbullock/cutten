@@ -113,7 +113,7 @@ class Main extends React.Component<IMainProps, IMainState> {
     const data = client.query({
       query: ANALYZE_FILE,
       variables: { date: this.state.date }
-    }).then(({ data }: IStateData) => {
+    }).then(({ data, loading }: IStateData) => {
       this.setState({data, disableAnalyze: true})
     })
   }

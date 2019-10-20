@@ -1,5 +1,14 @@
 import * as path from 'path';
 import * as koa from 'koa';
+import 'reflect-metadata';
+
+import {
+  createConnection
+} from "typeorm";
+
+import {
+  Record
+} from './entity/Record';
 
 import {
   fileLoader,
@@ -29,34 +38,31 @@ const server = new ApolloServer({ typeDefs, resolvers });
 // Init the koa app
 const app = new koa();
 
-// // database stuff
-// const connection = mysql.createConnection({
-//   host: 'localhost',
-//   user: 'me',
-//   password: 'secret',
-//   database: 'my_db'
-// });
-
-// connection.connect((err) => {
-//   if (err) {
-//     console.log('error connecting: ' + err.stack)
-//     return;
-//   }
-
-//   console.log('connected as id ' + connection.threadId);
-// });
-
-// connection.query('SELECT 1 + 1 AS solution', (error, results, fields) => {
-//   if (error) {
-//     throw error;
-//   }
-//   console.log('The solution is: ', results[0].solution)
-// })
-
-// connection.end();
-
 // attach koa app to the Apollo Server
 server.applyMiddleware({ app });
 
-// start the server
-app.listen({ port }, () => console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`));
+// create connection to cutten_db
+createConnection({
+  type: "mysql",
+  host: "cutten_db",
+  port: 3306,
+  username: "root",
+  password: "password",
+  database: "cutten_db",
+  entities: [
+    __dirname + "/entity/*.ts"
+  ],
+  synchronize: true
+}).then(async connection => {
+  const record = new Record();
+  record.filename = "cutten.txt";
+  record.date = "2019/10/10";
+  record.messageCount = 100;
+
+  // start the server
+  app.listen({ port }, () => console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)); 
+
+  await connection.manager.save(record)
+  console.log("record saved, record id is", record.id)
+  
+}).catch(error => console.log(error));
