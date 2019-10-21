@@ -6,7 +6,7 @@ type userPerDay {
 
 type Analyze {
   totalPerDay(date: String): Int!
-  usersPerDay(date: String): [userPerDay!]!
+  #usersPerDay(date: String): [userPerDay!]!
 }
 
 type Query {

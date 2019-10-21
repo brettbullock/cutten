@@ -64,9 +64,9 @@ class Statistics extends React.Component<IStatisticsProps> {
           {showStats && data &&
             <div>
               <h2>{data.analyze.totalPerDay} messages sent on {date}</h2>
-              {data.analyze.usersPerDay.map((user: IStateUserPerDay, index: number) => (
+              {/* {data.analyze.usersPerDay.map((user: IStateUserPerDay, index: number) => (
                 <h3 key={index}>{user.name} sent {user.messageCount} in total, with a K count of {user.kCount}</h3>  
-              ))}
+              ))} */}
             </div>
           }
         </div>

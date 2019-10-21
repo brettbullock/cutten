@@ -3,12 +3,8 @@ import * as koa from 'koa';
 import 'reflect-metadata';
 
 import {
-  createConnection
+  createConnection, ConnectionOptions
 } from "typeorm";
-
-import {
-  Record
-} from './entity/Record';
 
 import {
   fileLoader,
@@ -20,7 +16,9 @@ import {
   ApolloServer
 } from 'apollo-server-koa';
 
-import * as mysql from 'mysql';
+import {
+  FileRecord
+} from './entity/FileRecord';
 
 const port = 8000;
 
@@ -54,15 +52,18 @@ createConnection({
   ],
   synchronize: true
 }).then(async connection => {
-  const record = new Record();
-  record.filename = "cutten.txt";
-  record.date = "2019/10/10";
-  record.messageCount = 100;
+
+  // const record = new Record();
+  // record.filename = "cutten.txt";
+  // record.date = "2019/10/10";
+  // record.messageCount = 100;
 
   // start the server
   app.listen({ port }, () => console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)); 
 
-  await connection.manager.save(record)
-  console.log("record saved, record id is", record.id)
-  
+  const savedRecords = await connection.manager.find(FileRecord)
+  console.log("all records in db: ", savedRecords)
+  // await connection.manager.save(record)
+  // console.log("record saved, record id is", record.id)
+
 }).catch(error => console.log(error));

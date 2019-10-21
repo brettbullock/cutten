@@ -16,11 +16,11 @@ export const ANALYZE_FILE = gql`
   query analyze($date: String) {
     analyze {
       totalPerDay(date: $date)
-      usersPerDay(date: $date) {
-        name
-        messageCount
-        kCount
-      }
+      # usersPerDay(date: $date) {
+      #   name
+      #   messageCount
+      #   kCount
+      # }
     }
   }
 `;
