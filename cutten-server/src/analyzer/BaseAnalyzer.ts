@@ -4,12 +4,17 @@ import {
   createReadStream 
 } from 'fs'
 
-
 // object constructor function for getMessagesPerUser
 function UserPerDay(name) {
   this.name = name
   this.messageCount = 0
-  this.kCount = 0
+  this.k = 0
+}
+
+// object constructor for returned values
+function Results() {
+  this.messageCount = 0
+  this.usersPerDay = []
 }
 
 // object constructor to initialize time values
@@ -117,16 +122,15 @@ function MessageDetails(line) {
 // }
 
 class BaseAnalyzer {
-  public static getMessagesPerDay(messageCount, targetTime, line) {
+  public static getMessagesPerDay(results, targetTime, line) {
     // clean up messages
     const messageDetails = new MessageDetails(line)
 
     // match date to target date and check year, increment
-    if (messageDetails.messageYear === targetTime.year && messageDetails.messageDay === targetTime.day) {
-      console.log("reading message ", messageCount)      
-      messageCount++
+    if (messageDetails.messageYear === targetTime.year && messageDetails.messageDay === targetTime.day) {  
+      results.messageCount++
+      console.log(results.messageCount)
     }
-    return messageCount
   }
 
   // gets total number of messages per user for the day - the information needs to come back as an array of objects
@@ -154,12 +158,12 @@ class BaseAnalyzer {
     }
   }
 
-  public static Main(args) {
+  public static Main(args, mpd, mpu) {
     return new Promise((resolve, reject) => {
       const rl = readline.createInterface({input: createReadStream('/cutten-server/cutten.txt') })
 
       // initialize return integer
-      let messageCount = 0
+      const results = new Results()
 
       // set time
       const targetTime = new TargetTime(args.date)
@@ -173,18 +177,27 @@ class BaseAnalyzer {
 
       // for each line..
       rl.on('line', (line) => {
-        return this.getMessagesPerDay(messageCount, targetTime, line)
-        this.getMessagesPerUser(ahoObject, bradObject, brettObject, targetTime, line)
-        
+        if (mpd) {
+          this.getMessagesPerDay(results, targetTime, line) 
+        }
+        if (mpu) {
+          this.getMessagesPerUser(ahoObject, bradObject, brettObject, targetTime, line)
+        }
       })
 
       // after lines have been looped through
       rl.on('close', () => {
+        usersPerDay.push(ahoObject, bradObject, brettObject)
+        let analysis = {
+          messageCount: results.messageCount,
+          usersPerDay: usersPerDay
+        }
         // // add objects to return array 
         // usersPerDay.push(ahoObject, bradObject, brettObject)
         // // return array
         // resolve(usersPerDay)
-        resolve(messageCount)
+        console.log(analysis)
+        resolve(results.messageCount)
       })
     })
   } 

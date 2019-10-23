@@ -1,3 +1,5 @@
+import * as readline from 'readline'
+
 import {
   createWriteStream
 } from 'fs';
@@ -22,6 +24,14 @@ export default {
 
       // read the file and write file to disk
       await readStream.pipe(writeStream);
+
+      // code to modify file so that a tmp file is created with only the dates
+      // const rl = readline.createInterface({input: createReadStream('/cutten-server/cutten.txt') })
+
+      // for each line..
+      // rl.on('line', (line) => {
+      // if line date != date, pop
+      // }
 
       return true;
     }
