@@ -5,5 +5,5 @@ COPY ./yarn.lock /cutten-server
 ENV NODE_ENV=development
 RUN yarn install
 COPY . /cutten-server
-CMD ["yarn", "dev"]
+CMD ["yarn", "start"]
 EXPOSE 8000

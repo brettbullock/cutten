@@ -5,13 +5,13 @@ const resolvers = {
     analyze: () => BaseAnalyzer
   },
   Analyze: {
-    totalPerDay: (parent, args) => parent.Main(args, true, true),
-    // usersPerDay: (parent, args) => parent.getMessagesPerUser(args)
+    totalPerDay: (parent, args) => parent.getMessagesPerDay(args),
+    usersPerDay: (parent, args) => parent.getMessagesPerUser(args)
   },
   userPerDay: {
     name: (parent) => parent.name,
     messageCount: (parent) => parent.messageCount,
-    kCount: (parent) => parent.kCount
+    kCount: (parent) => parent.k
   }
 }
 

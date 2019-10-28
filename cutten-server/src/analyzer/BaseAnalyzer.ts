@@ -1,4 +1,3 @@
-import * as moment from 'moment'
 import * as readline from 'readline'
 import {
   createReadStream 
@@ -11,162 +10,73 @@ function UserPerDay(name) {
   this.k = 0
 }
 
-// object constructor for returned values
-function Results() {
-  this.messageCount = 0
-  this.usersPerDay = []
-}
-
 // object constructor to initialize time values
 function TargetTime(date) {
   if (!date) {
     // if no date, get yesterday and year
-    this.day = moment().subtract(1, 'days').dayOfYear()
-    this.year = moment().subtract(1, 'days').get('year')
+    const date = new Date()
+    this.targetDate = date.setDate(date.getDate() - 1)
   } else {
     // for specific day and year
-    this.day = moment(date).dayOfYear()
-    this.year = moment(date).get('year')    
+    this.targetDate = new Date(date)   
+  }
+}
+
+function parseLine(line) {
+  const messageArray = line.split(": ")
+  const infoArray = messageArray[0].split(/[,|^ -]+ /)
+  return {
+    messageArray,
+    infoArray
   }
 }
 
 // object constructor to organize line data
-function MessageDetails(line) {
-  this.messageArray = line.split(": ")
-  this.infoArray = this.messageArray[0].split(/[,|^ -]+ /)
-  // fof k's - if statement filters out unwanted undefined's
-  if (this.messageArray[1]) {
-    this.k = this.messageArray[1].match(/^(k|K|Potassium|\ud83c[\udf4c])$/)
+function MessageDetails({messageArray, infoArray}) {
+  // for k's - if statement filters out unwanted undefined's
+  if (messageArray[1] && messageArray[1].length === 1) {
+    this.k = messageArray[1].match(/^(k|K|\ud83c[\udf4c])$/)
   }
-  this.messageDay = moment(this.infoArray[0]).dayOfYear()
-  this.messageYear = moment(this.infoArray[0]).get('year')
+
+  this.messageDate = new Date(infoArray[0])
 }
 
 // this is going ot be the start of the analyzer
-// class BaseAnalyzer {
-//   // gets total messages sent per day for the group
-//   public static getMessagesPerDay(args) {
-//     return new Promise((resolve, reject) => {
-//       const rl = readline.createInterface({input: createReadStream('/cutten-server/cutten.txt') })
-
-//       // initialize return integer
-//       let messageCount = 0
-//       // set time
-//       const targetTime = new TargetTime(args.date)
-
-//       // for each line..
-//       rl.on('line', (line) => {
-//         // clean up messages
-//         const messageDetails = new MessageDetails(line)
-
-//         // match date to target date and check year, increment
-//         if (messageDetails.messageYear === targetTime.year && messageDetails.messageDay === targetTime.day) {
-//           messageCount++
-//         }
-//       })
-
-//       // after lines have been looped through
-//       rl.on('close', () => {
-//         resolve(messageCount)
-//       })
-//     })
-//   }
-//   // gets total number of messages per user for the day - the information needs to come back as an array of objects
-//   public static getMessagesPerUser(args) {
-//     return new Promise((resolve, reject) => {
-//       const rl = readline.createInterface({input: createReadStream('/cutten-server/cutten.txt') })
-
-//       // initialize return array
-//       const usersPerDay = []
-//       // create objects that will represent each of us - for now these will be hardcoded
-//       const ahoObject = new UserPerDay("Aho")
-//       const bradObject = new UserPerDay("Poo")
-//       const brettObject = new UserPerDay("Brett")
-//       // set time
-//       const targetTime = new TargetTime(args.date)
-      
-//       // for each line..
-//       rl.on('line', (line) => {
-//         // clean up messages 
-//         const messageDetails = new MessageDetails(line)
-
-//         //   for now we will use hard coded names
-//         // count times each name shows up
-//         if (!(messageDetails.messageYear === targetTime.year && messageDetails.messageDay === targetTime.day)) {return}
-        
-//         switch (messageDetails.infoArray[2]) {
-//           case "Adam Aho":
-//             ahoObject.messageCount +=1
-//             if (messageDetails.k) { ahoObject.k += 1 }
-//             break;
-//           case "Brad Dudeck":
-//             bradObject.messageCount +=1
-//             if (messageDetails.k) { bradObject.k += 1 }
-//             break;
-//           case "Brett Bullock":
-//             brettObject.messageCount +=1
-//             if (messageDetails.k) { brettObject.k += 1 }
-//             break;
-//         }
-//       })
-
-//       // after lines have been looped through
-//       rl.on('close', () => {
-//         // add objects to return array 
-//         usersPerDay.push(ahoObject, bradObject, brettObject)
-//         // return array
-//         resolve(usersPerDay)
-//       })
-//     })
-//   }
-// }
-
 class BaseAnalyzer {
-  public static getMessagesPerDay(results, targetTime, line) {
-    // clean up messages
-    const messageDetails = new MessageDetails(line)
-
-    // match date to target date and check year, increment
-    if (messageDetails.messageYear === targetTime.year && messageDetails.messageDay === targetTime.day) {  
-      results.messageCount++
-      console.log(results.messageCount)
-    }
-  }
-
-  // gets total number of messages per user for the day - the information needs to come back as an array of objects
-  public static getMessagesPerUser(ahoObject, bradObject, brettObject, targetTime, line) {
-    // clean up messages 
-    const messageDetails = new MessageDetails(line)
-
-    // for now we will use hard coded names
-    // count times each name shows up
-    if (!(messageDetails.messageYear === targetTime.year && messageDetails.messageDay === targetTime.day)) {return}
-    
-    switch (messageDetails.infoArray[2]) {
-      case "Adam Aho":
-        ahoObject.messageCount +=1
-        if (messageDetails.k) { ahoObject.k += 1 }
-        break;
-      case "Brad Dudeck":
-        bradObject.messageCount +=1
-        if (messageDetails.k) { bradObject.k += 1 }
-        break;
-      case "Brett Bullock":
-        brettObject.messageCount +=1
-        if (messageDetails.k) { brettObject.k += 1 }
-        break;
-    }
-  }
-
-  public static Main(args, mpd, mpu) {
+  // gets total messages sent per day for the group
+  public static getMessagesPerDay(args) {
     return new Promise((resolve, reject) => {
       const rl = readline.createInterface({input: createReadStream('/cutten-server/cutten.txt') })
-
       // initialize return integer
-      const results = new Results()
+      let messageCount = 0
 
       // set time
       const targetTime = new TargetTime(args.date)
+
+      // for each line..
+      rl.on('line', (line) => {
+        // clean up messages
+        const parsedLine = parseLine(line)
+
+        // get details 
+        const messageDetails = new MessageDetails(parsedLine)
+
+        // match date to target date, increment
+        if (messageDetails.messageDate - targetTime.targetDate === 0) {
+          messageCount++
+        }
+      })
+
+      // after lines have been looped through
+      rl.on('close', () => {
+        resolve(messageCount)
+      })
+    })
+  }
+  // gets total number of messages per user for the day - the information needs to come back as an array of objects
+  public static getMessagesPerUser(args) {
+    return new Promise((resolve, reject) => {
+      const rl = readline.createInterface({input: createReadStream('/cutten-server/cutten.txt') })
 
       // initialize return array
       const usersPerDay = []
@@ -174,33 +84,45 @@ class BaseAnalyzer {
       const ahoObject = new UserPerDay("Aho")
       const bradObject = new UserPerDay("Poo")
       const brettObject = new UserPerDay("Brett")
-
+      // set time
+      const targetTime = new TargetTime(args.date)
+      
       // for each line..
       rl.on('line', (line) => {
-        if (mpd) {
-          this.getMessagesPerDay(results, targetTime, line) 
-        }
-        if (mpu) {
-          this.getMessagesPerUser(ahoObject, bradObject, brettObject, targetTime, line)
+        // clean up messages
+        const parsedLine = parseLine(line)
+
+        // getDetails
+        const messageDetails = new MessageDetails(parsedLine)
+
+        // count times each name shows up
+        if (!(messageDetails.messageDate - targetTime.targetDate === 0)) {return}
+        
+        switch (parsedLine.infoArray[2]) {
+          case "Adam Aho":
+            ahoObject.messageCount +=1
+            if (messageDetails.k) { ahoObject.k += 1 }
+            break;
+          case "Brad Dudeck":
+            bradObject.messageCount +=1
+            if (messageDetails.k) { bradObject.k += 1 }
+            break;
+          case "Brett Bullock":
+            brettObject.messageCount +=1
+            if (messageDetails.k) { brettObject.k += 1 }
+            break;
         }
       })
 
       // after lines have been looped through
       rl.on('close', () => {
+        // add objects to return array 
         usersPerDay.push(ahoObject, bradObject, brettObject)
-        let analysis = {
-          messageCount: results.messageCount,
-          usersPerDay: usersPerDay
-        }
-        // // add objects to return array 
-        // usersPerDay.push(ahoObject, bradObject, brettObject)
-        // // return array
-        // resolve(usersPerDay)
-        console.log(analysis)
-        resolve(results.messageCount)
+        // return array
+        resolve(usersPerDay)
       })
     })
-  } 
+  }
 }
 
 export default BaseAnalyzer
